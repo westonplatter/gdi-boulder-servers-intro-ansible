@@ -154,4 +154,105 @@ ROUGH DRAFT STEPS TO REPRODUCE IN ANSIBLE
 	sudo service nginx restart
 	```
 	Go to ip:7000
- 
+
+13. install nodejs from the chris lea ppa
+	
+	update apt-get and install nodejs build dependencies
+	```sh
+	sudo apt-get update
+	sudo apt-get install -y python-software-properties python g++ make
+	```
+		
+	add a non-default apt-get ppa
+	```sh
+	sudo add-apt-repository ppa:chris-lea/node.js
+	sudo apt-get update
+	```
+	
+	install nodejs
+	```sh
+	sudo apt-get install nodejs
+	```
+
+	test that you have node 0.10.x
+	```sh
+	node -v
+	```
+
+14. setup nginx reverse proxy
+	
+	create a reverse proxy nginx server 
+	```sh
+	cd /etc/nginx/sites-enabled
+	sudo vim touch nodejs_uploader
+	```
+	
+	```sh
+	# nodejs_uploader nginx conf 
+	
+	server {
+  		listen 9000;
+  		location / { 
+  				proxy_pass http://127.0.0.1:7020;
+  		} 
+	}
+	```
+	
+	test it out
+	```sh
+	sudo service nginx restart
+	```
+	
+	go to ip:9000, and you should see a NGINX 500 Bad Gateway page.
+
+15. install git
+
+	install git
+	```sh
+	sudo apt-get update
+	sudo apt-get install git
+	```
+	
+16. clone westonplatter/gdi-boulder-servers-intro-node-uploader
+	
+		git clone the repo to the server
+		```sh
+		cd /var/www
+		git clone git@github.com:westonplatter/gdi-boulder-servers-intro-node-uploader.git nodejs_uploader
+		```
+		
+17. install nodejs dependencies
+
+		install nodejs dependencies via npm
+		```sh
+		cd /var/www/nodejs_uploader
+		npm install
+		```
+		
+		test that it works
+		```sh
+		node server.js
+		```
+		
+		go to ip:9000, and you should see upload page
+
+18. keep the app running via forever
+
+		install forever
+		```sh
+		sudo node install -g forever
+		```
+		
+		see list of forever processes
+		```sh
+		forever list
+		```
+		
+		start the app with forever
+		```sh
+		forever start node server.js
+		```
+		
+		now you can exit out of the SSH connection and the app still works
+
+		
