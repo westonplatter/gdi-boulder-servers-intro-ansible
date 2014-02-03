@@ -263,3 +263,18 @@ ROUGH DRAFT STEPS TO REPRODUCE IN ANSIBLE
   
   
     now you can exit out of the SSH connection and the app still works
+
+19. modify nginx to enable larger file uploads
+
+    open `/etc/nginx/nginx.conf` for editing
+    
+        sudo vim /etc/nginx/nginx.conf
+    
+    add this configuration to allow uploads up to 5 megs
+        
+        client_max_body_size 5m;
+
+20. test upload ability
+    
+    upload 4mb file
+
