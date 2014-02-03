@@ -1,6 +1,13 @@
 ROUGH DRAFT STEPS TO REPRODUCE IN ANSIBLE
 
-1. ssh with root and password
+DO - digital ocean. hosting provider for student servers.
+
+
+0. locally create SSH public/private key
+
+    use the github tutorial to creete their own SSH key (use current one if they already have an SSH key)
+
+1. ssh into Digital Ocean (DO) using root and password
 
     replace ip_address with actual ip
   
@@ -8,16 +15,12 @@ ROUGH DRAFT STEPS TO REPRODUCE IN ANSIBLE
     
 
 2. create `deploy` user
-
-    commands - http://linux.about.com/od/commands/l/blcmdl8_useradd.htm
   
     create user
 
         useradd deploy -d /home/deploy -m -s /bin/bash
 
-    
     set password
-  
   
         passwd deploy
         # enter new password after prompt
@@ -150,11 +153,9 @@ ROUGH DRAFT STEPS TO REPRODUCE IN ANSIBLE
         mkdir html_site
   
 
-11. scp files up to the `/var/www/html_site` folder
+11. manually copy over HTML files into `/var/www/html_site` folder
 
-    scp does the file transfer
-  
-        scp -r ./html_site/* deploy@ip:/var/www/html_site
+    manually copy and paste HTML between computer and DO server (we'll keep the files __really__ simple)
   
   
 12. restart nginx to pick up the new html site
