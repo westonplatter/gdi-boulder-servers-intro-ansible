@@ -1,0 +1,47 @@
+---
+
+- name: "create {{ instructor.group }} group"
+  sudo: true
+  group: "name={{ instructor.group }}"
+
+- name: "add {{ instructor.user }} user"
+  sudo: true
+  user: name={{ instructor.user }}
+        group={{ instructor.group }}
+        shell={{ instructor.shell }}
+        password={{ instructor.password }}
+
+- name: "Add {{ instructor.user }} to sudoers"
+  action: lineinfile 
+          dest=/etc/sudoers 
+          regexp="{{ instructor.user }} ALL" 
+          line="{{ instructor.user }} ALL=(ALL) ALL" 
+          state=present
+    
+- name: "add public key to {{ instructor.user }} authorized keys"
+  sudo: true
+  authorized_key: "user={{ instructor.user }} key='{{ item }}'"
+  with_file: instructor.public_key_files
+
+- name: "allow {{ instructor.user }} to ssh"
+  sudo: true
+  lineinfile: dest=/etc/ssh/sshd_config 
+              regexp="AllowUsers {{ instructor.user }}"
+              line="AllowUsers {{ instructor.user }}"
+
+- name: restart ssh
+  sudo: true
+  service:  name=ssh 
+            state=restarted
+  
+- name: Remove sudo group rights
+  action: lineinfile dest=/etc/sudoers 
+          regexp="^%sudo" 
+          state=absent
+
+- name: disallow root SSH access
+  sudo: yes
+  action: lineinfile dest=/etc/ssh/sshd_config 
+          regexp="^PermitRootLogin" 
+          line="PermitRootLogin no" 
+          state=present

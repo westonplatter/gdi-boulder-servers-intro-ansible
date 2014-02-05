@@ -1,0 +1,3 @@
+### security precaution; don't commit public keys
+*.pub
+roles/user_instructor_create/files

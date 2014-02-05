@@ -1,0 +1,14 @@
+---
+
+- name: step 2 | create deploy user
+  sudo: yes
+  # password = gdi
+  # looks like giberish, but it was generated using, 
+  #     
+  #   openssl passwd -salt boulder -1 gdi 
+  # 
+  user: name=deploy
+        password=$1$boulder$7msGUuk1hbFswE4Vjhxgi1
+        group=root
+        shell=/bin/bash
+      

@@ -1,0 +1,7 @@
+---
+- name: add ssh keys
+  hosts: all
+  roles: 
+    - user_instructor_create
+    
+        

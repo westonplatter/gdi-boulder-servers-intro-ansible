@@ -1,0 +1,11 @@
+---
+instructor:
+  user: instructor
+  group: instructor
+  shell: '/bin/bash'
+  # 
+  # openssl passwd -salt boulder -1 gdi => $1$boulder$7msGUuk1hbFswE4Vjhxgi1
+  # 
+  password: '$1$boulder$7msGUuk1hbFswE4Vjhxgi1'
+  public_key_files: 
+    - westonplatter.pub
