@@ -1,29 +1,39 @@
 ---
 - name: "create {{ instructor.group }} group"
+  sudo: true
   group: "name={{ instructor.group }}"
 
 - name: "add {{ instructor.user }} user"
+  sudo: true
   user: name={{ instructor.user }}
         group={{ instructor.group }}
         shell={{ instructor.shell }}
         password={{ instructor.password }}
 
-- name: "Add {{ instructor.user }} to sudoers"
-  action: lineinfile 
-          dest=/etc/sudoers 
-          regexp="{{ instructor.user }} ALL" 
-          line="{{ instructor.user }} ALL=(ALL) ALL" 
-          state=present
-    
+- name: set sudoers file permissions
+  sudo: true
+  file: src=sudoers
+        path=/etc/sudoers
+        owner=root
+        group=root
+        mode=0440
+        state=file
+
+- name: set sshd_config file permissions
+  sudo: true  
+  file: src=sshd_config
+        path=/etc/ssh/sshd_config
+        owner=root
+        group=root
+        mode=0440
+        state=file
+
 - name: "add public key to {{ instructor.user }} authorized keys"
+  sudo: true
   authorized_key: "user={{ instructor.user }} key='{{ item }}'"
   with_file: instructor.public_key_files
-
-- name: "allow {{ instructor.user }} to ssh"
-  lineinfile: dest=/etc/ssh/sshd_config 
-              regexp="AllowUsers {{ instructor.user }}"
-              line="AllowUsers {{ instructor.user }}"
-
+  
 - name: restart ssh
+  sudo: true
   service: name=ssh 
            state=restarted
